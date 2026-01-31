@@ -2,10 +2,9 @@
    GAME CONFIG
    =============================== */
 const choices = [
-  { name: "rock", emoji: "🪨", beats: ["scissors", "stone"] },
+  { name: "rock", emoji: "🪨", beats: ["scissors"] },
   { name: "paper", emoji: "📄", beats: ["rock"] },
-  { name: "scissors", emoji: "✂️", beats: ["paper"] },
-  { name: "stone", emoji: "🪵", beats: ["scissors"] } // Different emoji for clarity
+  { name: "scissors", emoji: "✂️", beats: ["paper"] }
 ];
 
 /* ===============================
@@ -38,20 +37,39 @@ document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   themeBtn.addEventListener("click", toggleTheme);
 
-  // Game buttons
+  // Game buttons - Add both click and touch support
   choiceButtons.forEach(btn => {
     btn.addEventListener("click", () => startRound(btn.dataset.choice));
+    // Prevent double-tap zoom on mobile
+    btn.addEventListener("touchstart", (e) => {
+      if (gameState.isPlaying) return;
+      e.preventDefault();
+      startRound(btn.dataset.choice);
+    }, { passive: false });
   });
 
   resetBtn.addEventListener("click", resetGame);
+  resetBtn.addEventListener("touchstart", (e) => {
+    if (gameState.playerScore === 0 && gameState.botScore === 0) return;
+    e.preventDefault();
+    resetGame();
+  }, { passive: false });
 
-  // Animate load
-  gsap.from(".game", { opacity: 0, y: 50, duration: 0.8, ease: "power3.out" });
-  gsap.from(".player-card", { opacity: 0, x: -30, duration: 0.6, stagger: 0.2, ease: "power2.out" });
-  gsap.from(".choice-btn", { opacity: 0, y: 20, duration: 0.6, stagger: 0.1, ease: "power2.out" });
+  // Animate load - Set initial state then animate
+  gsap.set(".game", { opacity: 0, y: 50 });
+  gsap.set(".player-card", { opacity: 0, x: -30 });
+  gsap.set(".choice-btn", { opacity: 0, y: 20 });
+  
+  gsap.to(".game", { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" });
+  gsap.to(".player-card", { opacity: 1, x: 0, duration: 0.6, stagger: 0.2, ease: "power2.out", delay: 0.2 });
+  gsap.to(".choice-btn", { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power2.out", delay: 0.3 });
 
   // Keyboard shortcuts
   document.addEventListener("keydown", handleKeyPress);
+
+  // Prevent text selection on mobile
+  document.body.style.webkitUserSelect = "none";
+  document.body.style.userSelect = "none";
 });
 
 /* ===============================
@@ -186,13 +204,34 @@ function enableAllButtons() {
    =============================== */
 function handleKeyPress(e) {
   if (gameState.isPlaying) return;
-  switch(e.key.toLowerCase()) {
-    case "r": startRound("rock"); break;
-    case "p": startRound("paper"); break;
-    case "s": startRound("scissors"); break;
-    case "t": startRound("stone"); break;
-    case "0": resetGame(); break;
-
-    
+  const key = e.key.toLowerCase();
+  
+  switch(key) {
+    case "r":
+      startRound("rock");
+      break;
+    case "p":
+      startRound("paper");
+      break;
+    case "s":
+      startRound("scissors");
+      break;
+    case "0":
+      resetGame();
+      break;
+    default:
+      // Ignore other keys
+      break;
   }
+}
+
+// Export for testing if needed
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { 
+    gameState, 
+    startRound, 
+    resetGame, 
+    decideWinner,
+    choices 
+  };
 }
