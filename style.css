@@ -125,6 +125,8 @@ body.light-theme .moon-icon {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .game:hover {
@@ -257,6 +259,8 @@ body.light-theme .moon-icon {
   font-weight: 600;
   position: relative;
   overflow: hidden;
+  pointer-events: auto;
+  visibility: visible;
 }
 
 .choice-btn::before {

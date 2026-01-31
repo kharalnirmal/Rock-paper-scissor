@@ -56,10 +56,14 @@ document.addEventListener("DOMContentLoaded", () => {
     resetGame();
   }, { passive: false });
 
-  // Animate load
-  gsap.from(".game", { opacity: 0, y: 50, duration: 0.8, ease: "power3.out" });
-  gsap.from(".player-card", { opacity: 0, x: -30, duration: 0.6, stagger: 0.2, ease: "power2.out" });
-  gsap.from(".choice-btn", { opacity: 0, y: 20, duration: 0.6, stagger: 0.1, ease: "power2.out" });
+  // Animate load - Set initial state then animate
+  gsap.set(".game", { opacity: 0, y: 50 });
+  gsap.set(".player-card", { opacity: 0, x: -30 });
+  gsap.set(".choice-btn", { opacity: 0, y: 20 });
+  
+  gsap.to(".game", { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" });
+  gsap.to(".player-card", { opacity: 1, x: 0, duration: 0.6, stagger: 0.2, ease: "power2.out", delay: 0.2 });
+  gsap.to(".choice-btn", { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power2.out", delay: 0.3 });
 
   // Keyboard shortcuts
   document.addEventListener("keydown", handleKeyPress);
