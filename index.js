@@ -2,10 +2,9 @@
    GAME CONFIG
    =============================== */
 const choices = [
-  { name: "rock", emoji: "🪨", beats: ["scissors", "stone"] },
+  { name: "rock", emoji: "🪨", beats: ["scissors"] },
   { name: "paper", emoji: "📄", beats: ["rock"] },
-  { name: "scissors", emoji: "✂️", beats: ["paper"] },
-  { name: "stone", emoji: "🪵", beats: ["scissors"] } // Different emoji for clarity
+  { name: "scissors", emoji: "✂️", beats: ["paper"] }
 ];
 
 /* ===============================
@@ -216,9 +215,6 @@ function handleKeyPress(e) {
       break;
     case "s":
       startRound("scissors");
-      break;
-    case "t":
-      startRound("stone");
       break;
     case "0":
       resetGame();
